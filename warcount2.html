@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <script src="jquery.min.js"></script>
+        <script src="raphael-min.js"></script>
+        <script src="kartograph.min.js"></script>
+    </head>
+    <body>
+<div id="map">&nbsp;</div>
+<link rel="stylesheet" type="text/css" href="jquery.qtip.css" />
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript" src="raphael-min.js"></script>
+<script type="text/javascript" src="jquery.qtip.min.js"></script>
+<script type="text/javascript" src="chroma.min.js"></script>
+<script type="text/javascript" src="kartograph.min.js"></script>
+
+<script type="text/javascript">
+	    $.fn.qtip.defaults.style.classes = 'ui-tooltip-bootstrap';
+        $.fn.qtip.defaults.style.def = false;
+        var conflict = {};
+		$.getJSON('conflicts.json', function(conflict) {
+		var map = kartograph.map('#map',800,600);
+		map.loadMap('wworld.svg', function() {
+		                map.addLayer('world', {
+							    styles: {
+										fill: '#cdd',
+										'stroke-width': 0.5
+										},
+						
+					            tooltips: function(d) {
+												return [d.iso3, conflict[d.iso3]?conflict[d.iso3].con: 0];
+											}
+                });
+                map.getLayer('world').style('fill', function(data) {
+							return conflict[data.iso3] ? '#d00' : '#ccc';
+						});
+				});
+		});
+</script>
+    </body>
+</html>
